@@ -1,8 +1,7 @@
 import app from './app';
+import backend from './backend';
 import {get_actions, parse_actions} from "eosws"
 import {Tweet} from './models/tweet';
-import axios from 'axios';
-import axiosRetry from 'axios-retry';
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
@@ -21,12 +20,10 @@ app.onmessage = (message) => {
 
   if (tweets) {
     console.log(tweets.data.trace.act);
-    axiosRetry(axios, { retries: 3 });
-    axios.defaults.headers.post['Content-Type'] = 'text/plain';
-    axios.post(process.env.HTTP_HOST, tweets.data)
+    backend.post(process.env.HTTP_HOST, tweets.data)
       .catch(function (error) {
         console.log('http error: ' + error.response);
-      });
+    });
   }
 };
 
