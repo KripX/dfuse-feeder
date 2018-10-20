@@ -1,12 +1,12 @@
 {
-  "name": "nebula-feeder",
+  "name": "nebula-dfuse",
   "scripts": {
     "postdeploy": ""
   },
   "env": {
   },
   "formation": {
-    "web": {
+    "worker": {
       "quantity": 1
     }
   },
