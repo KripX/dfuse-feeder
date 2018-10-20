@@ -19,7 +19,7 @@ app.onmessage = (message) => {
   const actions = parse_actions(message.data);
 
   if (actions) {
-    console.log(actions.data.trace);
+    console.log(actions.data.trace.act);
     //axios.get('/user?ID=12345');
   }
 };
