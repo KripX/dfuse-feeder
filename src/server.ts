@@ -15,7 +15,9 @@ const contracts = [
   'nebulacoinnn',
   'nebulatalked',
   'nebulaskills',
-  'nebulajobbbb'
+  'nebulajobbbb',
+  'nebulaoracle',
+  'nebulawhitel'
 ];
 
 app.onopen = () => {
