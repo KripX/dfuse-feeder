@@ -1,7 +1,6 @@
 import app from './app';
 import backend from './backend';
 import {get_actions, parse_actions} from "eosws"
-import {Tweet} from './models/tweet';
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
@@ -24,7 +23,7 @@ app.onopen = () => {
   console.log({ref: "app::open", message: "connection open"});
 
   for (const account of contracts) {
-    app.send(get_actions(account, null, null, { start_block: Number(process.env.START_BLOCK) }))
+    app.send(get_actions(account, null, null, {start_block: Number(process.env.START_BLOCK)}))
   }
 
   /* app.send(get_actions("decentwitter", "tweet", null, { req_id: "decentwitter::tweet", start_block: Number(process.env.START_BLOCK) })); */
@@ -38,8 +37,16 @@ app.onmessage = (message) => {
     console.log(action.data.trace.act);
     backend.post(process.env.HTTP_HOST, action.data)
       .catch(function (error) {
-        console.log('http error: ' + error.response);
-    });
+        if (error.response) {
+          console.log('ERROR:' + error.response.data);
+          console.log('ERROR:' + error.response.status);
+          console.log('ERROR:' + error.response.headers);
+        } else if (error.request) {
+          console.log('ERROR:' + error.request);
+        } else {
+          console.log('ERROR:' + error.message);
+        }
+      });
   }
 };
 
