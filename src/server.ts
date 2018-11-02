@@ -1,6 +1,7 @@
 import app from './app';
 import backend from './backend';
 import {get_actions, parse_actions} from "eosws";
+const axiosRetry = require('axios-retry');
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
@@ -32,6 +33,9 @@ app.onmessage = (message: any) => {
 
   if (action) {
     console.log(action.data.trace.act);
+    axiosRetry(backend, { retryDelay: (retryCount: any) => {
+      return retryCount * 1500;
+    }});
     backend.post(process.env.HTTP_HOST, action.data)
       .catch(function (error) {
         if (error.response) {
