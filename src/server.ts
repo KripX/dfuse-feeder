@@ -1,6 +1,6 @@
 import app from './app';
 import backend from './backend';
-import {get_actions, parse_actions} from "eosws"
+import {get_actions, parse_actions} from "eosws";
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
@@ -25,12 +25,9 @@ app.onopen = () => {
   for (const account of contracts) {
     app.send(get_actions(account, null, null, {start_block: Number(process.env.START_BLOCK)}))
   }
-
-  /* app.send(get_actions("decentwitter", "tweet", null, { req_id: "decentwitter::tweet", start_block: Number(process.env.START_BLOCK) })); */
 };
 
-app.onmessage = (message) => {
-  //const tweets = parse_actions<Tweet>(message.data, "decentwitter::tweet");
+app.onmessage = (message: any) => {
   const action = parse_actions(message.data);
 
   if (action) {
