@@ -1,7 +1,7 @@
 {
   "name": "nebula-feeder",
   "version": "1.0.0",
-  "description": "",
+  "description": "Feeder from EOSWS to RabbitMQ",
   "main": "dist/server.js",
   "scripts": {
     "build-ts": "tsc",
@@ -48,8 +48,9 @@
     "@types/ws": "^6.0.1"
   },
   "dependencies": {
-    "axios": "^0.18.0",
-    "axios-retry": "^3.1.1",
+    "@types/bluebird": "^3.5.24",
+    "amqp-ts": "^1.4.0",
+    "amqplib": "^0.5.2",
     "dotenv": "^6.1.0",
     "eosws": "^1.2.1"
   }

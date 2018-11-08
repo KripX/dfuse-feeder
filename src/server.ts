@@ -1,7 +1,6 @@
 import app from './app';
-import backend from './backend';
 import {get_actions, parse_actions} from "eosws";
-
+import * as Amqp from "amqp-ts";
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
@@ -19,6 +18,9 @@ const contracts = [
   'nebulawhitel'
 ];
 
+const connection = new Amqp.Connection(process.env.CLOUDAMQP_URL);
+const queue = connection.declareQueue('messages', {durable: true});
+
 app.onopen = () => {
   console.log({ref: "app::open", message: "connection open"});
 
@@ -32,19 +34,8 @@ app.onmessage = (message: any) => {
 
   if (action) {
     console.log(action.data.trace.act);
-    backend.post(process.env.HTTP_HOST, action.data)
-      .catch(function (error) {
-        if (error.response) {
-          console.log('ERROR:' + error.response.data);
-          console.log('ERROR:' + error.response.status);
-          console.log('ERROR:' + error.response.headers);
-        } else if (error.request) {
-          console.log('ERROR:' + error.request);
-        } else {
-          console.log('ERROR:' + error.message);
-        }
-        setTimeout(() => { backend.post(process.env.HTTP_HOST, action.data); }, 5000);
-      });
+    const message = new Amqp.Message(JSON.stringify(action));
+    queue.send(message);
   }
 };
 
