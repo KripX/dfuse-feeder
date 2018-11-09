@@ -8,7 +8,6 @@ import {
 } from "@dfuse/eosws-js";
 import * as Amqp from "amqp-ts";
 import WebSocket from "ws"
-import {Action} from '@dfuse/eosws-js/dist';
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
@@ -42,7 +41,7 @@ const onMessage = (message: InboundMessage<any>) => {
   }
   if (message.type === InboundMessageType.ERROR) {
     const error = message.data as ErrorData;
-    console.log(`Received ERROR: ${error.message} (${error.code})`, error.details);
+    console.log(`Received error: ${error.message} (${error.code})`, error.details);
     return;
   }
 };
@@ -51,7 +50,11 @@ const onClose = () => {
   console.log({ref: "app", message: "connection closed"});
 };
 
-const client = new EoswsClient(createEoswsSocket(socketFactory, {onClose, autoReconnect: true}));
+const onError = () => {
+  console.log({ref: "app", message: "error detected"});
+};
+
+const client = new EoswsClient(createEoswsSocket(socketFactory, {onError, onClose, autoReconnect: true}));
 client.connect().then(() => {
   console.log({ref: "app::open", message: "connection open"});
   for (const account of contracts) {
@@ -60,6 +63,6 @@ client.connect().then(() => {
       .onMessage(onMessage);
   }
 }).catch((error) => {
-  console.log("ERROR: Unable to connect", error)
+  console.log("error: Unable to connect", error)
 });
 
