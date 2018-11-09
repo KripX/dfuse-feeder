@@ -52,6 +52,6 @@
     "amqp-ts": "^1.4.0",
     "amqplib": "^0.5.2",
     "dotenv": "^6.1.0",
-    "eosws": "^1.2.1"
+    "@dfuse/eosws-js": "^0.10.0"
   }
 }
