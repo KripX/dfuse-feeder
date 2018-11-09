@@ -8,6 +8,7 @@ import {
 } from "@dfuse/eosws-js";
 import * as Amqp from "amqp-ts";
 import WebSocket from "ws"
+import {Action} from '@dfuse/eosws-js/dist';
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
@@ -35,7 +36,7 @@ const onMessage = (message: InboundMessage<any>) => {
   if (message.type === InboundMessageType.ACTION_TRACE) {
     const actionTraceData = message.data as ActionTraceData<any>;
     console.log(actionTraceData.trace.act);
-    const amqMessage = new Amqp.Message(JSON.stringify(actionTraceData.trace.act));
+    const amqMessage = new Amqp.Message(JSON.stringify(message));
     queue.send(amqMessage);
     return;
   }
