@@ -50,10 +50,12 @@ function init() {
 
   const onClose = () => {
     console.log({ref: "app", message: "connection closed"});
+    setTimeout(init, 5000);
   };
 
   const onError = () => {
     console.log({ref: "app", message: "error detected"});
+    setTimeout(init, 5000);
   };
 
   const client = new EoswsClient(createEoswsSocket(socketFactory, {onError, onClose, autoReconnect: true}));
@@ -66,6 +68,7 @@ function init() {
     }
   }).catch((error) => {
     console.log("error: Unable to connect", error);
+    setTimeout(init, 10000);
   });
 }
 
