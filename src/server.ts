@@ -31,7 +31,7 @@ const queue = connection.declareQueue('messages', {durable: true});
 
 function init() {
   const origin = process.env.ORIGIN;
-  const socketFactory = () => new WebSocket(`wss://staging-mainnet.eos.dfuse.io/v1/stream?token=${process.env.API_TOKEN}`, {origin});
+  const socketFactory = () => new WebSocket(`wss://mainnet.eos.dfuse.io/v1/stream?token=${process.env.API_TOKEN}`, {origin});
 
   const onMessage = (message: InboundMessage<any>) => {
     if (message.type === InboundMessageType.ACTION_TRACE) {
