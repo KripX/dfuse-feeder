@@ -55,10 +55,9 @@ function init() {
 
   const onError = () => {
     console.log({ref: "app", message: "error detected"});
-    setTimeout(init, 5000);
   };
 
-  const client = new EoswsClient(createEoswsSocket(socketFactory, {onError, onClose, autoReconnect: true}));
+  const client = new EoswsClient(createEoswsSocket(socketFactory, {onError, onClose, autoReconnect: false}));
   client.connect().then(() => {
     console.log({ref: "app::open", message: "connection open"});
     for (const account of contracts) {
