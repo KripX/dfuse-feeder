@@ -23,7 +23,8 @@ const contracts = [
   'nebulaskills',
   'nebulajobbbb',
   'nebulaoracle',
-  'nebulawhitel'
+  'nebulawhitel',
+  'nebulapredic'
 ];
 
 const connection = new Amqp.Connection(process.env.CLOUDAMQP_URL);
