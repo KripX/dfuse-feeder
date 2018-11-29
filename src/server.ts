@@ -61,11 +61,9 @@ function init() {
   const client = new EoswsClient(createEoswsSocket(socketFactory, {onError, onClose, autoReconnect: false}));
   client.connect().then(() => {
     console.log({ref: "app::open", message: "connection open"});
-    for (const account of contracts) {
-      client
-        .getActionTraces({account}, {start_block: Number(process.env.START_BLOCK)})
-        .onMessage(onMessage);
-    }
+    client
+      .getActionTraces({accounts: contracts.join("|")}, {start_block: Number(process.env.START_BLOCK)})
+      .onMessage(onMessage);
   }).catch((error) => {
     console.log("error: Unable to connect", error);
     setTimeout(init, 10000);
