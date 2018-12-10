@@ -30,6 +30,15 @@ const contracts = [
 const connection = new Amqp.Connection(process.env.CLOUDAMQP_URL);
 const queue = connection.declareQueue('messages', {durable: true});
 
+const onClose = () => {
+  console.log({ref: "app", message: "connection closed"});
+  setTimeout(init, 10000);
+};
+
+const onError = () => {
+  console.log({ref: "app", message: "error detected"});
+};
+
 function init() {
   const origin = process.env.ORIGIN;
   const socketFactory = () => new WebSocket(`wss://mainnet.eos.dfuse.io/v1/stream?token=${process.env.API_TOKEN}`, {origin});
@@ -49,15 +58,6 @@ function init() {
     }
   };
 
-  const onClose = () => {
-    console.log({ref: "app", message: "connection closed"});
-    setTimeout(init, 5000);
-  };
-
-  const onError = () => {
-    console.log({ref: "app", message: "error detected"});
-  };
-
   const client = new EoswsClient(createEoswsSocket(socketFactory, {onError, onClose, autoReconnect: false}));
   client.connect().then(() => {
     console.log({ref: "app::open", message: "connection open"});
@@ -66,7 +66,6 @@ function init() {
       .onMessage(onMessage);
   }).catch((error) => {
     console.log("error: Unable to connect", error);
-    setTimeout(init, 10000);
   });
 }
 
@@ -74,6 +73,5 @@ try {
   init();
 }
 catch (err) {
-  console.log("error: Catch", err);
-  setTimeout(init, 5000);
+  setTimeout(init, 30000);
 }
