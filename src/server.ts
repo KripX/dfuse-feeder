@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV === 'production') {
+  require('newrelic');
+}
 import {
   ActionTraceData,
   createEoswsSocket,
@@ -9,9 +12,6 @@ import {
 import * as Amqp from "amqp-ts";
 import WebSocket from "ws"
 
-if (process.env.NODE_ENV === 'production') {
-  require('newrelic');
-}
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
